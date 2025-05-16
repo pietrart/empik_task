@@ -11,4 +11,8 @@ record CouponCode (String code) {
             throw new TaskAppException("Invalid coupon code");
         }
     }
+
+    public String formattedCode() {
+        return code.toUpperCase();
+    }
 }

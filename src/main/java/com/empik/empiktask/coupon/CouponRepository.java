@@ -2,7 +2,7 @@ package com.empik.empiktask.coupon;
 
 import java.util.Optional;
 
-interface CouponRepository {
+public interface CouponRepository {
 
     boolean couponWithCodeExists(String code);
 
@@ -11,4 +11,8 @@ interface CouponRepository {
     Optional<Coupon> findByCode(String code);
 
     boolean couponCodeUsedByUser(String code, String userId);
+
+    void registerUserUsage(String code, String userId);
+
+    void deleteAll();
 }

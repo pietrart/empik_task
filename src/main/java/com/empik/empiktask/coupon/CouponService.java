@@ -47,5 +47,6 @@ public class CouponService {
         CountryCode userCountryCodeBasedOnIp = geoApi.getCountryCodeByIp(IpAddress.from(couponUsed.userId()));
         coupon.registerCouponUsage(userCountryCodeBasedOnIp);
         repository.save(coupon);
+        repository.registerUserUsage(coupon.getCode().formattedCode(), couponUsed.userId());
     }
 }
