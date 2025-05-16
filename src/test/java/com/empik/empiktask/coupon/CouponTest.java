@@ -7,7 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.empik.empiktask.common.CountryCode;
 import com.empik.empiktask.common.TaskAppException;
 import java.time.LocalDate;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 class CouponTest {
 
@@ -55,15 +59,21 @@ class CouponTest {
         assertEquals("Cannot use coupon, limit reached", exception.getMessage());
     }
 
-    @Test
-    void registerCouponUsage_should_throw_on_different_country() {
+    static Stream<Arguments> registerCouponUsageInvalidCountryData() {
+        return Stream.of(
+            Arguments.of(CountryCode.PL, ""),
+            Arguments.of(null, ""),
+            Arguments.of(CountryCode.CN, "")
+        );
+    }
+    @ParameterizedTest
+    @MethodSource("registerCouponUsageInvalidCountryData")
+    void registerCouponUsage_should_throw_on_different_country(CountryCode countryCode) {
         //given
         Coupon result = Coupon.createNewCoupon("TEST-1", 5, CountryCode.BR);
-        result.registerCouponUsage(CountryCode.BR);
-        result.registerCouponUsage(CountryCode.BR);
         //when
         TaskAppException exception = assertThrows(TaskAppException.class,
-            () -> result.registerCouponUsage(CountryCode.PL));
+            () -> result.registerCouponUsage(countryCode));
         //then
         assertEquals("Cannot use coupon, coupon for different country", exception.getMessage());
     }

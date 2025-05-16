@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 class Coupon {
 
-    private final String couponId;
+    private final UUID couponId;
     private final CouponCode code;
     private final LocalDate createdAt;
     private final int maxUsage;
@@ -29,7 +29,7 @@ class Coupon {
             .country(country)
             .createdAt(LocalDate.now())
             .actualUsage(0)
-            .couponId(UUID.randomUUID().toString())
+            .couponId(UUID.randomUUID())
             .build();
     }
 
@@ -52,6 +52,9 @@ class Coupon {
     }
 
     private boolean couponForCountry(CountryCode country) {
+        if (country == null) {
+            return false;
+        }
         return this.country.equals(country);
     }
 
