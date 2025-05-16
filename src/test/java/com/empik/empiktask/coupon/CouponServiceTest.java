@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 import com.empik.empiktask.common.CountryCode;
 import com.empik.empiktask.common.IpAddress;
-import com.empik.empiktask.common.TaskAppException;
+import com.empik.empiktask.common.error.TaskAppException;
 import com.empik.empiktask.coupon.dpo.CouponUsed;
 import com.empik.empiktask.coupon.dpo.NewCoupon;
 import com.empik.empiktask.geoapi.GeoApi;
@@ -59,7 +59,7 @@ class CouponServiceTest {
         //then
         assertNotNull(created);
         //and
-        verify(repository, times(1)).save(any(Coupon.class));
+        verify(repository, times(1)).createNew(any(Coupon.class));
     }
 
     @Test
@@ -111,11 +111,19 @@ class CouponServiceTest {
         when(repository.findByCode(testCouponCode)).thenReturn(Optional.of(existingCoupon));
         //and
         when(geoApi.getCountryCodeByIp(any(IpAddress.class))).thenReturn(CountryCode.PL);
+        //and
+        when(repository.updateUsage(any(Coupon.class))).thenReturn(existingCoupon);
         //when
         service.registerCouponUsageByUser(couponUsed);
         //then
         ArgumentCaptor<Coupon> couponCaptor = ArgumentCaptor.forClass(Coupon.class);
-        verify(repository, times(1)).save(couponCaptor.capture());
+        verify(repository, times(1)).updateUsage(couponCaptor.capture());
         assertEquals(1, couponCaptor.getValue().getActualUsage());
+        //and
+        ArgumentCaptor<String> codeCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> userIdCaptor = ArgumentCaptor.forClass(String.class);
+        verify(repository, times(1)).registerUserUsage(codeCaptor.capture(), userIdCaptor.capture());
+        assertEquals(userId, userIdCaptor.getValue());
+        assertEquals(testCouponCode, codeCaptor.getValue());
     }
 }

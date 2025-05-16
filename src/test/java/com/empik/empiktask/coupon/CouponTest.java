@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.empik.empiktask.common.CountryCode;
-import com.empik.empiktask.common.TaskAppException;
+import com.empik.empiktask.common.error.TaskAppException;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;

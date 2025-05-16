@@ -1,6 +1,7 @@
 package com.empik.empiktask.coupon;
 
 import com.empik.empiktask.common.CountryCode;
+import com.empik.empiktask.common.error.TaskAppException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -30,11 +31,11 @@ class CouponNormalizingRepository implements CouponRepository {
 
     @Override
     public boolean couponWithCodeExists(String code) {
-        return repository.existsCouponByCode(code);
+        return repository.existsCouponByCodeIgnoreCase(code);
     }
 
     @Override
-    public Coupon save(Coupon newCoupon) {
+    public Coupon createNew(Coupon newCoupon) {
         CouponEntity entity = new CouponEntity();
         entity.setCoupon(newCoupon);
         return repository.save(entity).getCoupon();
@@ -42,7 +43,7 @@ class CouponNormalizingRepository implements CouponRepository {
 
     @Override
     public Optional<Coupon> findByCode(String code) {
-        Optional<CouponEntity> found = repository.findByCode(code);
+        Optional<CouponEntity> found = repository.findByCodeIgnoreCase(code);
         if (found.isPresent()) {
             return found.map(CouponEntity::getCoupon);
         }
@@ -51,7 +52,7 @@ class CouponNormalizingRepository implements CouponRepository {
 
     @Override
     public boolean couponCodeUsedByUser(String code, String userId) {
-        return couponUserRepository.existsByCouponCodeAndUserId(code, userId);
+        return couponUserRepository.existsByCouponCodeIgnoreCaseAndUserId(code, userId);
     }
 
     @Override
@@ -65,18 +66,26 @@ class CouponNormalizingRepository implements CouponRepository {
         couponUserRepository.deleteAll();
     }
 
+    @Override
+    public Coupon updateUsage(Coupon coupon) {
+        CouponEntity entity = repository.findByCodeIgnoreCase(coupon.getCode().formattedCode())
+            .orElseThrow(() -> new TaskAppException("Coupon not found"));
+        entity.updateCouponUsage(coupon);
+        return repository.save(entity).getCoupon();
+    }
+
     @Repository
     interface CouponJpaRepository extends JpaRepository<CouponEntity, Long> {
 
-        boolean existsCouponByCode(String code);
+        boolean existsCouponByCodeIgnoreCase(String code);
 
-        Optional<CouponEntity> findByCode(String code);
+        Optional<CouponEntity> findByCodeIgnoreCase(String code);
     }
 
     @Repository
     interface CouponUserJpaRepository extends JpaRepository<CouponUsedByUserEntity, Long> {
 
-        boolean existsByCouponCodeAndUserId(String couponCode, String userId);
+        boolean existsByCouponCodeIgnoreCaseAndUserId(String couponCode, String userId);
     }
 
     @Data
@@ -120,6 +129,12 @@ class CouponNormalizingRepository implements CouponRepository {
             this.maxUsage = newCoupon.getMaxUsage();
             this.actualUsage = newCoupon.getActualUsage();
             this.countryCode = newCoupon.getCountry();
+            this.version = newCoupon.getVersion();
+        }
+
+        public void updateCouponUsage(Coupon coupon) {
+            this.actualUsage = coupon.getActualUsage();
+            this.version = coupon.getVersion();
         }
 
         public Coupon getCoupon() {
@@ -129,7 +144,8 @@ class CouponNormalizingRepository implements CouponRepository {
                 this.createdAt,
                 this.maxUsage,
                 this.actualUsage,
-                this.countryCode
+                this.countryCode,
+                this.version
             );
         }
     }

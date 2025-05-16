@@ -2,7 +2,7 @@ package com.empik.empiktask.coupon;
 
 import com.empik.empiktask.common.CountryCode;
 import com.empik.empiktask.common.IpAddress;
-import com.empik.empiktask.common.TaskAppException;
+import com.empik.empiktask.common.error.TaskAppException;
 import com.empik.empiktask.coupon.dpo.CouponUsed;
 import com.empik.empiktask.coupon.dpo.NewCoupon;
 import com.empik.empiktask.geoapi.GeoApi;
@@ -31,7 +31,7 @@ public class CouponService {
             coupon.country()
         );
         log.info("New coupon prepared {}", newCoupon.getCouponId());
-        repository.save(newCoupon);
+        repository.createNew(newCoupon);
         return newCoupon.getCouponId();
     }
 
@@ -46,7 +46,7 @@ public class CouponService {
             .orElseThrow(() -> new TaskAppException(String.format("Coupon with code %s not found", couponUsed.code())));
         CountryCode userCountryCodeBasedOnIp = geoApi.getCountryCodeByIp(IpAddress.from(couponUsed.userId()));
         coupon.registerCouponUsage(userCountryCodeBasedOnIp);
-        repository.save(coupon);
+        coupon = repository.updateUsage(coupon);
         repository.registerUserUsage(coupon.getCode().formattedCode(), couponUsed.userId());
     }
 }

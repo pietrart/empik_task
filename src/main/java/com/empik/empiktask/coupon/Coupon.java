@@ -1,7 +1,7 @@
 package com.empik.empiktask.coupon;
 
 import com.empik.empiktask.common.CountryCode;
-import com.empik.empiktask.common.TaskAppException;
+import com.empik.empiktask.common.error.TaskAppException;
 import java.time.LocalDate;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -19,6 +19,7 @@ class Coupon {
     private final int maxUsage;
     private int actualUsage;
     private final CountryCode country;
+    private final Long version;
 
     static Coupon createNewCoupon(String code, int maxUsage, CountryCode country) {
         CouponCode newCouponCode = new CouponCode(code);
@@ -30,6 +31,7 @@ class Coupon {
             .createdAt(LocalDate.now())
             .actualUsage(0)
             .couponId(UUID.randomUUID())
+            .version(0L)
             .build();
     }
 

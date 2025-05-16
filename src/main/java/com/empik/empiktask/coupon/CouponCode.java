@@ -1,6 +1,6 @@
 package com.empik.empiktask.coupon;
 
-import com.empik.empiktask.common.TaskAppException;
+import com.empik.empiktask.common.error.TaskAppException;
 import org.apache.commons.lang3.StringUtils;
 
 record CouponCode (String code) {
@@ -13,6 +13,6 @@ record CouponCode (String code) {
     }
 
     public String formattedCode() {
-        return code.toUpperCase();
+        return code.toUpperCase().trim();
     }
 }

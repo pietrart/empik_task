@@ -6,7 +6,7 @@ public interface CouponRepository {
 
     boolean couponWithCodeExists(String code);
 
-    Coupon save(Coupon newCoupon);
+    Coupon createNew(Coupon newCoupon);
 
     Optional<Coupon> findByCode(String code);
 
@@ -15,4 +15,6 @@ public interface CouponRepository {
     void registerUserUsage(String code, String userId);
 
     void deleteAll();
+
+    Coupon updateUsage(Coupon coupon);
 }

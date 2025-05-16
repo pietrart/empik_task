@@ -1,4 +1,4 @@
-package com.empik.empiktask.common;
+package com.empik.empiktask.common.error;
 
 public class TaskAppException extends RuntimeException{
     private final String message;
