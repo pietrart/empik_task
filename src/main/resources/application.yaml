@@ -23,3 +23,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui
     display-request-duration: true
+
+geo-api:
+  url: http://ip-api.com

@@ -1,9 +1,9 @@
-package com.empik.empiktask.geoapi;
+package com.empik.empiktask.geo;
 
 import com.empik.empiktask.common.CountryCode;
 import com.empik.empiktask.common.IpAddress;
 
-public interface GeoApi {
+public interface GeoService {
 
     CountryCode getCountryCodeByIp(IpAddress address);
 }

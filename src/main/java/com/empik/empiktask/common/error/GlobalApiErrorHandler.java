@@ -52,10 +52,14 @@ public class GlobalApiErrorHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(TaskAppException.class)
-    public ResponseEntity<ApiErrorResponse> handleApplicationException(Exception ex) {
+    public ResponseEntity<ApiErrorResponse> handleApplicationException(TaskAppException ex) {
         log.error("", ex);
+        HttpStatus errorCode = HttpStatus.BAD_REQUEST;
+        if (ex.getCode() != null) {
+            errorCode = ex.getCode();
+        }
         return new ResponseEntity<>(
-            ApiErrorResponse.from(ex.getMessage(), HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+            ApiErrorResponse.from(ex.getMessage(), errorCode.value()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)

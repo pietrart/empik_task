@@ -5,7 +5,7 @@ import com.empik.empiktask.common.IpAddress;
 import com.empik.empiktask.common.error.TaskAppException;
 import com.empik.empiktask.coupon.dpo.CouponUsed;
 import com.empik.empiktask.coupon.dpo.NewCoupon;
-import com.empik.empiktask.geoapi.GeoApi;
+import com.empik.empiktask.geo.GeoService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CouponService {
 
     private final CouponRepository repository;
-    private final GeoApi geoApi;
+    private final GeoService geoService;
 
     public UUID createCoupon(NewCoupon coupon) {
         log.info("Creating coupon {}", coupon);
@@ -44,7 +44,7 @@ public class CouponService {
         }
         Coupon coupon = repository.findByCode(couponUsed.code())
             .orElseThrow(() -> new TaskAppException(String.format("Coupon with code %s not found", couponUsed.code())));
-        CountryCode userCountryCodeBasedOnIp = geoApi.getCountryCodeByIp(IpAddress.from(couponUsed.userId()));
+        CountryCode userCountryCodeBasedOnIp = geoService.getCountryCodeByIp(IpAddress.from(couponUsed.ip()));
         coupon.registerCouponUsage(userCountryCodeBasedOnIp);
         coupon = repository.updateUsage(coupon);
         repository.registerUserUsage(coupon.getCode().formattedCode(), couponUsed.userId());

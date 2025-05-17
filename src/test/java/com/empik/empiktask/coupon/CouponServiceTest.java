@@ -13,7 +13,7 @@ import com.empik.empiktask.common.IpAddress;
 import com.empik.empiktask.common.error.TaskAppException;
 import com.empik.empiktask.coupon.dpo.CouponUsed;
 import com.empik.empiktask.coupon.dpo.NewCoupon;
-import com.empik.empiktask.geoapi.GeoApi;
+import com.empik.empiktask.geo.GeoService;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class CouponServiceTest {
     @Mock
     private CouponRepository repository;
     @Mock
-    private GeoApi geoApi;
+    private GeoService geoService;
 
     @InjectMocks
     private CouponService service;
@@ -110,7 +110,7 @@ class CouponServiceTest {
         assertEquals(0, existingCoupon.getActualUsage());
         when(repository.findByCode(testCouponCode)).thenReturn(Optional.of(existingCoupon));
         //and
-        when(geoApi.getCountryCodeByIp(any(IpAddress.class))).thenReturn(CountryCode.PL);
+        when(geoService.getCountryCodeByIp(any(IpAddress.class))).thenReturn(CountryCode.PL);
         //and
         when(repository.updateUsage(any(Coupon.class))).thenReturn(existingCoupon);
         //when
