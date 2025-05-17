@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -81,5 +82,5 @@ interface CouponResource {
     })
     @PostMapping(REGISTER_COUPON_USED_BY_USER_REST_API)
     @ResponseStatus(HttpStatus.OK)
-    void registerCouponUsageByUser(@Valid @RequestBody CouponUsed couponUsed);
+    void registerCouponUsageByUser(@Valid @RequestBody CouponUsed couponUsed, HttpServletRequest request);
 }

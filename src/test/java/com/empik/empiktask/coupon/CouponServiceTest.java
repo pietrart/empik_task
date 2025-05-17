@@ -68,7 +68,7 @@ class CouponServiceTest {
         String testCouponCode = "TEST-1";
         String userId = UUID.randomUUID().toString();
         String testIp = "127.0.0.1";
-        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, testIp);
+        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, IpAddress.from(testIp));
         //and
         when(repository.couponCodeUsedByUser(testCouponCode, userId)).thenReturn(true);
         //when
@@ -84,7 +84,7 @@ class CouponServiceTest {
         String testCouponCode = "TEST-1";
         String userId = UUID.randomUUID().toString();
         String testIp = "127.0.0.1";
-        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, testIp);
+        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, IpAddress.from(testIp));
         //and
         when(repository.couponCodeUsedByUser(testCouponCode, userId)).thenReturn(false);
         //and
@@ -102,7 +102,7 @@ class CouponServiceTest {
         String testCouponCode = "TEST-1";
         String userId = UUID.randomUUID().toString();
         String testIp = "127.0.0.1";
-        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, testIp);
+        CouponUsed couponUsed = new CouponUsed(userId, testCouponCode, IpAddress.from(testIp));
         //and
         when(repository.couponCodeUsedByUser(testCouponCode, userId)).thenReturn(false);
         //and

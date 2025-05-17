@@ -36,63 +36,38 @@ class CouponController_registerCouponUsageByUser_Test extends BaseTestIT {
             Arguments.of("""
                 {
                   "userId": "",
-                  "code": "TEST-1",
-                  "ip": "127.0.0.1"
+                  "code": "TEST-1"
                 }
-                """, "Invalid user id"),
+                """, "Invalid user id")
+            ,
             Arguments.of("""
                 {
                   "userId": null,
-                  "code": "TEST-1",
-                  "ip": "127.0.0.1"
-                }
-                """, "Invalid user id"),
-            Arguments.of("""
-                {
-                  "code": "TEST-1",
-                  "ip": "127.0.0.1"
-                }
-                """, "Invalid user id"),
-            Arguments.of("""
-                {
-                  "userId": "user-1",
-                  "code": "",
-                  "ip": "127.0.0.1"
-                }
-                """, "Invalid coupon code"),
-            Arguments.of("""
-                {
-                  "userId": "user-1",
-                  "ip": "127.0.0.1"
-                }
-                """, "Invalid coupon code"),
-            Arguments.of("""
-                {
-                  "userId": "user-1",
-                  "code": null,
-                  "ip": "127.0.0.1"
-                }
-                """, "Invalid coupon code"),
-            Arguments.of("""
-                {
-                  "userId": "user-1",
                   "code": "TEST-1"
                 }
-                """, "Invalid IP"),
+                """, "Invalid user id"),
+            Arguments.of("""
+                {
+                  "code": "TEST-1"
+                }
+                """, "Invalid user id"),
             Arguments.of("""
                 {
                   "userId": "user-1",
-                  "code": "TEST-1",
-                  "ip": ""
+                  "code": ""
                 }
-                """, "Invalid IP"),
+                """, "Invalid coupon code"),
+            Arguments.of("""
+                {
+                  "userId": "user-1"
+                }
+                """, "Invalid coupon code"),
             Arguments.of("""
                 {
                   "userId": "user-1",
-                  "code": "TEST-1",
-                  "ip": null
+                  "code": null
                 }
-                """, "Invalid IP")
+                """, "Invalid coupon code")
         );
     }
 
@@ -131,6 +106,6 @@ class CouponController_registerCouponUsageByUser_Test extends BaseTestIT {
         verify(service, times(1)).registerCouponUsageByUser(captor.capture());
         assertEquals("TEST-1", captor.getValue().code());
         assertEquals("user-1", captor.getValue().userId());
-        assertEquals("127.0.0.1", captor.getValue().ip());
+        assertEquals("127.0.0.1", captor.getValue().ip().address());
     }
 }

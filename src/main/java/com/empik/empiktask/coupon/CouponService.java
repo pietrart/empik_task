@@ -44,7 +44,7 @@ public class CouponService {
         }
         Coupon coupon = repository.findByCode(couponUsed.code())
             .orElseThrow(() -> new TaskAppException(String.format("Coupon with code %s not found", couponUsed.code())));
-        CountryCode userCountryCodeBasedOnIp = geoService.getCountryCodeByIp(IpAddress.from(couponUsed.ip()));
+        CountryCode userCountryCodeBasedOnIp = geoService.getCountryCodeByIp(IpAddress.from(couponUsed.ip().address()));
         coupon.registerCouponUsage(userCountryCodeBasedOnIp);
         coupon = repository.updateUsage(coupon);
         repository.registerUserUsage(coupon.getCode().formattedCode(), couponUsed.userId());
