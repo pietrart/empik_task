@@ -14,7 +14,9 @@ import jakarta.persistence.Version;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -74,18 +76,35 @@ class CouponNormalizingRepository implements CouponRepository {
         return repository.save(entity).getCoupon();
     }
 
+    @Override
+    public UserCoupons getUserCoupons(String userId) {
+        Set<String> couponCodesAssignedToUser = couponUserRepository.findByUserId(userId)
+            .stream()
+            .map(CouponUsedByUserEntity::getCouponCode)
+            .collect(Collectors.toSet());
+        Set<Coupon> coupons = repository.findAllByCodeIn(couponCodesAssignedToUser)
+            .stream()
+            .map(CouponEntity::getCoupon)
+            .collect(Collectors.toSet());
+        return new UserCoupons(coupons, userId);
+    }
+
     @Repository
     interface CouponJpaRepository extends JpaRepository<CouponEntity, Long> {
 
         boolean existsCouponByCodeIgnoreCase(String code);
 
         Optional<CouponEntity> findByCodeIgnoreCase(String code);
+
+        Set<CouponEntity> findAllByCodeIn(Set<String> codes);
     }
 
     @Repository
     interface CouponUserJpaRepository extends JpaRepository<CouponUsedByUserEntity, Long> {
 
         boolean existsByCouponCodeIgnoreCaseAndUserId(String couponCode, String userId);
+
+        Set<CouponUsedByUserEntity> findByUserId(String userId);
     }
 
     @Data

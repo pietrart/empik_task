@@ -17,4 +17,6 @@ public interface CouponRepository {
     void deleteAll();
 
     Coupon updateUsage(Coupon coupon);
+
+    UserCoupons getUserCoupons(String userId);
 }
