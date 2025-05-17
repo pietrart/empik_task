@@ -1,0 +1,31 @@
+### Create new coupon
+POST http://localhost:8080/api/v1/coupons
+Content-Type: application/json
+Accept: application/json
+
+{
+  "code": "TEST-COUPON-001",
+  "maxUsage": 5,
+  "country": "PL"
+}
+
+### Create new coupon - Invalid country code
+POST http://localhost:8080/api/v1/coupons
+Content-Type: application/json
+Accept: application/json
+
+{
+  "code": "TEST-COUPON-001",
+  "maxUsage": 5
+}
+
+### Register coupon usage by user
+POST http://localhost:8080/api/v1/coupons/register
+Content-Type: application/json
+Accept: application/json
+X-Forwarded-For: 83.10.45.67
+
+{
+  "userId": "user-1",
+  "code": "TEST-COUPON-001"
+}
