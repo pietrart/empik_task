@@ -28,7 +28,7 @@ public class CouponService {
         Coupon newCoupon = Coupon.createNewCoupon(
             coupon.code(),
             coupon.maxUsage(),
-            coupon.country()
+            coupon.countryCode()
         );
         log.info("New coupon prepared {}", newCoupon.getCouponId());
         repository.createNew(newCoupon);

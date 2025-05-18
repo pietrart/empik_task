@@ -21,3 +21,5 @@ CREATE TABLE IF NOT EXISTS t_coupon_user
 );
 
 CREATE INDEX idx_coupon_code_user_id ON t_coupon_user (cu_coupon_code, cu_user_id);
+
+CREATE INDEX idx_coupon_code ON t_coupon (c_code);

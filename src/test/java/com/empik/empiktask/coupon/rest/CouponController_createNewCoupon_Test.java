@@ -122,7 +122,7 @@ class CouponController_createNewCoupon_Test extends BaseTestIT {
         ArgumentCaptor<NewCoupon> captor = ArgumentCaptor.forClass(NewCoupon.class);
         verify(service, times(1)).createCoupon(captor.capture());
         assertEquals("TEST-1", captor.getValue().code());
-        assertEquals(CountryCode.PL, captor.getValue().country());
+        assertEquals(CountryCode.PL, captor.getValue().countryCode());
         assertEquals(5, captor.getValue().maxUsage());
     }
 }

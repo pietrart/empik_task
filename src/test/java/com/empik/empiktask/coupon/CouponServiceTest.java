@@ -38,7 +38,7 @@ class CouponServiceTest {
     void createCoupon_should_throw_on_coupon_exists() {
         //given
         String testCouponCode = "TEST-1";
-        NewCoupon newCoupon = new NewCoupon(testCouponCode, 5, CountryCode.PL);
+        NewCoupon newCoupon = new NewCoupon(testCouponCode, 5, CountryCode.PL, CountryCode.PL.name());
         //and
         when(repository.couponWithCodeExists(testCouponCode)).thenReturn(true);
         //when
@@ -51,7 +51,7 @@ class CouponServiceTest {
     void createCoupon_should_return_new_coupon_id() {
         //given
         String testCouponCode = "TEST-1";
-        NewCoupon newCoupon = new NewCoupon(testCouponCode, 5, CountryCode.PL);
+        NewCoupon newCoupon = new NewCoupon(testCouponCode, 5, CountryCode.PL, CountryCode.PL.name());
         //and
         when(repository.couponWithCodeExists(testCouponCode)).thenReturn(false);
         //when
